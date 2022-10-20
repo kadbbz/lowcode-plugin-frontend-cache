@@ -1,0 +1,18 @@
+{
+  "assembly": [
+    "FrontendCacheCommand.dll"
+  ],
+  "javascript": [
+    "Resources/FrontendCacheCommand.js"
+  ],
+  "css": [],
+  "image": "Resources/PluginLogo.png",
+  "description": "提供访问前端缓存的能力，可用于支持离线操作或提升页面响应速度。",
+  "name": "客户端缓存操作工具库",
+  "pluginType": "command",
+  "guid": "{059F2457-468E-4F2E-9F2A-A0A30CF4BBC0}",
+  "version": "1.0.0.0",
+  "dependenceVersion": "8.0.4.0",
+  "bundleJavaScript": true,
+  "bundleCSS": true
+}
