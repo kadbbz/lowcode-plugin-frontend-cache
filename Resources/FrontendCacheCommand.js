@@ -62,7 +62,7 @@ var Retrieve_LocalCache_Command = (function (_super) {
             var value = JSON.parse(localStorage.getItem(realKey));
 
             if (value && value.version === version) {
-                Forguncy.Page.getCellByLocation(cellLocationV).setValue((value.value) ? JSON.stringify(value.value) : DATA_NOT_FOUND);
+                Forguncy.Page.getCellByLocation(cellLocationV).setValue((value.value) ? value.value : DATA_NOT_FOUND);
             } else {
                 Forguncy.Page.getCellByLocation(cellLocationV).setValue(DATA_NOT_FOUND);
             }
