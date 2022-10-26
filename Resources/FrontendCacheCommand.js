@@ -1,4 +1,6 @@
 ﻿
+var DATA_NOT_FOUND = "DATA_NOT_FOUND";
+
 var Upsert_LocalCache_Command = (function (_super) {
     __extends(Upsert_LocalCache_Command, _super);
     function Upsert_LocalCache_Command() {
@@ -12,15 +14,21 @@ var Upsert_LocalCache_Command = (function (_super) {
         var value = this.evaluateFormula(param.ValueString);
         var version = this.evaluateFormula(param.VersionString);
 
-        if (window.localKv) {
-            // HAC
-            window.localKv.upsertV(key,value,version);
+        if (value === DATA_NOT_FOUND) {
+            throw "不能传入本插件用于标示没找到缓存的关键字：DATA_NOT_FOUND";
         } else {
-            // 浏览器
-            var realKey = key + "|" + version;
-            localStorage.setItem(realKey, value);
+            if (window.localKv) {
+                // HAC
+                window.localKv.upsertV(key, value, version);
+            } else {
+                // 浏览器
+                var realKey = key;
+                localStorage.setItem(realKey, JSON.stringify({
+                    version: version,
+                    value: value
+                }));
+            }
         }
-
     };
 
     return Upsert_LocalCache_Command;
@@ -50,10 +58,14 @@ var Retrieve_LocalCache_Command = (function (_super) {
             window.localKv.retrieveV(key, version, cellInfoV);
         } else {
             // 浏览器
-            var realKey = key + "|" + version;
-            var value = localStorage.getItem(realKey);
+            var realKey = key;
+            var value = JSON.parse(localStorage.getItem(realKey));
 
-            Forguncy.Page.getCellByLocation(cellLocationV).setValue(value);
+            if (value && value.version === version) {
+                Forguncy.Page.getCellByLocation(cellLocationV).setValue((value.value) ? JSON.stringify(value.value) : DATA_NOT_FOUND);
+            } else {
+                Forguncy.Page.getCellByLocation(cellLocationV).setValue(DATA_NOT_FOUND);
+            }
         }
 
     };

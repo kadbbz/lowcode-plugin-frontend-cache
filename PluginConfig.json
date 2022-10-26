@@ -12,7 +12,7 @@
   "pluginType": "command",
   "guid": "{059F2457-468E-4F2E-9F2A-A0A30CF4BBC0}",
   "version": "1.0.0.0",
-  "dependenceVersion": "8.0.4.0",
+  "dependenceVersion": "8.0.102.0",
   "bundleJavaScript": true,
   "bundleCSS": true
 }
