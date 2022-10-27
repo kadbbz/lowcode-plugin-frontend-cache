@@ -75,3 +75,30 @@ var Retrieve_LocalCache_Command = (function (_super) {
 
 // Key format is "Namespace.ClassName, AssemblyName"
 Forguncy.CommandFactory.registerCommand("FrontendCacheCommand.Retrieve_LocalCache, FrontendCacheCommand", Retrieve_LocalCache_Command);
+
+var Reset_LocalCache_Command = (function (_super) {
+    __extends(Reset_LocalCache_Command, _super);
+    function Reset_LocalCache_Command() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+
+    Reset_LocalCache_Command.prototype.execute = function () {
+
+        var param = this.CommandParam;
+        var key = this.evaluateFormula(param.KeyString);
+       
+        if (window.localKv) {
+            // HAC
+            window.localKv.remove(key);
+        } else {
+            // 浏览器
+            localStorage.removeItem(key);
+        }
+
+    };
+
+    return Reset_LocalCache_Command;
+}(Forguncy.CommandBase));
+
+// Key format is "Namespace.ClassName, AssemblyName"
+Forguncy.CommandFactory.registerCommand("FrontendCacheCommand.Reset_LocalCache, FrontendCacheCommand", Reset_LocalCache_Command);
