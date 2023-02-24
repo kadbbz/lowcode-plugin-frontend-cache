@@ -5,38 +5,37 @@ using System.ComponentModel;
 
 namespace FrontendCacheCommand
 {
-    [Icon("pack://application:,,,/FrontendCacheCommand;component/Resources/IconUpload.png")]
+    [Icon("pack://application:,,,/FrontendCacheCommand;component/Resources/IconDownload.png")]
     [Category("客户端缓存")]
-    [OrderWeight(1)]
-    public class Upsert_LocalCache : Command
+    [OrderWeight(100)]
+    public class Retrieve_LocalCache2 : Command
     {
+
         [FormulaProperty()]
         [DisplayName("键（大小写敏感）")]
-        [OrderWeight(1)]
         [SearchableProperty]
+        [OrderWeight(1)]
         public object KeyString { get; set; }
 
         [FormulaProperty()]
-        [DisplayName("值")]
+        [DisplayName("期望的版本")]
+        [SearchableProperty]
         [OrderWeight(2)]
-        [SearchableProperty]
-        public object ValueString { get; set; }
-
-        [FormulaProperty()]
-        [OrderWeight(3)]
-        [DisplayName("版本")]
-        [SearchableProperty]
         public object VersionString { get; set; }
+
+        [ResultToProperty]
+        [DisplayName("将数据保存到变量")]
+        [OrderWeight(3)]
+        public string OutParamaterName { get; set; }
 
         public override string ToString()
         {
-            return "存入客户端缓存";
+            return "从客户端缓存中读取";
         }
 
         public override CommandScope GetCommandScope()
         {
             return CommandScope.All;
         }
-
     }
 }

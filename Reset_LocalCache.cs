@@ -5,14 +5,16 @@ using System.ComponentModel;
 
 namespace FrontendCacheCommand
 {
-    [Icon("pack://application:,,,/FrontendCacheCommand;component/Resources/Icon_upsert.png")]
-    public class Reset_LocalCache : Command, IPropertySearchable, IForceGenerateCell
+    [Icon("pack://application:,,,/FrontendCacheCommand;component/Resources/IconDeleteFile.png")]
+    [Category("客户端缓存")]
+    [OrderWeight(200)]
+    public class Reset_LocalCache : Command
     {
-        [FormulaProperty(true)]
+        [FormulaProperty]
         [DisplayName("键（大小写敏感）")]
+        [SearchableProperty]
+        [OrderWeight(1)]
         public object KeyString { get; set; }
-
-        public object VersionString { get; set; }
 
         public override string ToString()
         {
@@ -24,33 +26,6 @@ namespace FrontendCacheCommand
             return CommandScope.All;
         }
 
-        public IEnumerable<FindResultItem> EnumSearchableProperty(LocationIndicator location)
-        {
-            List<FindResultItem> result = new List<FindResultItem>();
-
-            result.Add(new FindResultItem() { 
-                Location = location.AppendProperty("键"),
-                Value = KeyString?.ToString()
-            });
-
-            return result;
-        }
-
-        public IEnumerable<GenerateCellInfo> GetForceGenerateCells()
-        {
-           
-            List<GenerateCellInfo> result = new List<GenerateCellInfo>();
-
-            if (KeyString is IFormulaReferObject formulaReferObject)
-            {
-                var kString = formulaReferObject.GetGenerateCellInfo();
-                if (kString != null)
-                {
-                    result.Add(kString);
-                }
-            }
-
-            return result;
-        }
+       
     }
 }
