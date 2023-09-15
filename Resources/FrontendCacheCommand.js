@@ -1,5 +1,6 @@
 ﻿
 var DATA_NOT_FOUND = "DATA_NOT_FOUND";
+var DATA_NULL = "DATA_NULL";
 
 var Upsert_LocalCache_Command = (function (_super) {
     __extends(Upsert_LocalCache_Command, _super);
@@ -14,14 +15,22 @@ var Upsert_LocalCache_Command = (function (_super) {
         var value = this.evaluateFormula(param.ValueString);
         var version = this.evaluateFormula(param.VersionString);
 
-        if (value === DATA_NOT_FOUND) {
-            throw "不能传入本插件用于标示没找到缓存的关键字：DATA_NOT_FOUND";
+        if (value === DATA_NOT_FOUND || value === DATA_NULL) {
+            throw "不能传入本插件用于标示没找到缓存的关键字：DATA_NOT_FOUND、DATA_NULL";
         } else {
+
             if (window.localKv) {
-                // HAC
+
+                if (value === null) {
+                    value = DATA_NULL;
+                }
+
+                if (value instanceof Object) {
+                    value = JSON.stringify(value);
+                }
+
                 window.localKv.upsertV(key, value, version);
             } else {
-                // 浏览器
                 var realKey = key;
                 localStorage.setItem(realKey, JSON.stringify({
                     version: version,
@@ -59,10 +68,21 @@ var Retrieve_LocalCache_Command = (function (_super) {
         } else {
             // 浏览器
             var realKey = key;
-            var value = JSON.parse(localStorage.getItem(realKey));
+            var valueB = JSON.parse(localStorage.getItem(realKey));
 
-            if (value && value.version === version) {
-                Forguncy.Page.getCellByLocation(cellLocationV).setValue((value.value) ? value.value : DATA_NOT_FOUND);
+            if (valueB && valueB.version === version) {
+
+                var realValue;
+
+                if (valueB.value === undefined) {
+                    realValue = DATA_NOT_FOUND;
+                } else if (valueB.value === DATA_NULL) {
+                    realValue = null;
+                } else {
+                    realValue = valueB.value
+                }
+
+                Forguncy.Page.getCellByLocation(cellLocationV).setValue(realValue);
             } else {
                 Forguncy.Page.getCellByLocation(cellLocationV).setValue(DATA_NOT_FOUND);
             }
@@ -131,9 +151,14 @@ var Retrieve_LocalCache2_Command = (function (_super) {
             var valueB = JSON.parse(localStorage.getItem(realKey));
 
             if (valueB && valueB.version === version && valueB.value) {
-                if (valueB.value) {
-                    value = valueB.value;
-                } 
+               
+                if (valueB.value === undefined) {
+                    value = DATA_NOT_FOUND;
+                } else if (valueB.value === DATA_NULL) {
+                    value = null;
+                } else {
+                    value = valueB.value
+                }
             }
         }
 
