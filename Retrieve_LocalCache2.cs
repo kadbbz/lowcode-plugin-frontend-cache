@@ -30,7 +30,15 @@ namespace FrontendCacheCommand
 
         public override string ToString()
         {
-            return "从客户端缓存中读取";
+            if (string.IsNullOrEmpty(OutParamaterName))
+            {
+                return "从客户端缓存中读取";
+            }
+            else
+            {
+                return "从客户端缓存中读取：" + OutParamaterName;
+            }
+
         }
 
         public override CommandScope GetCommandScope()

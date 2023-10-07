@@ -142,7 +142,12 @@ var Retrieve_LocalCache2_Command = (function (_super) {
             value = window.localKv.retrieveV2(key, version);
 
             if (value !== DATA_NOT_FOUND) {
-                value = JSON.parse(value);
+
+                try {
+                    value = JSON.parse(value);
+                } catch (error) {
+                    // 无需处理
+                }
             }
 
         } else {
